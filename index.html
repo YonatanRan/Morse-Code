@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <title>Morse Code Converter</title>
+    <script type="text/javascript">
+        
+          var morse_code_map = {
+              'A' : ['0','1'],
+              'B' : ['1','0','0','0'],
+              'C' : ['1','0','1','0'],
+              'D' : ['1','0','0'],
+              'E' : ['0'],
+              'F' : ['0','0','1','0'],
+              'G' : ['1','1','0'],
+              'H' : ['0','0','0','0'],
+              'I' : ['0','0'],
+              'J' : ['0','1','1','1'],
+              'K' : ['1','0','1'],
+              'L' : ['0','1','0','0'],
+              'M' : ['1','1'],
+              'N' : ['1','0'],
+              'O' : ['1','1','1'],
+              'P' : ['0','1','1','0'],
+              'Q' : ['1','1','0','1'],
+              'R' : ['0','1','0'],
+              'S' : ['0','0','0'],
+              'T' : ['1'],
+              'U' : ['0','0','1'],
+              'V' : ['0','0','0','1'],
+              'W' : ['0','1','1'],
+              'X' : ['1','0','0','1'],
+              'Y' : ['1','0','1','1'],
+              'Z' : ['1','1','0','0'],
+              '1' : ['0','1','1','1','1'],
+              '2' : ['0','0','1','1','1'],
+              '3' : ['0','0','0','1','1'],
+              '4' : ['0','0','0','0','1'],
+              '5' : ['0','0','0','0','0'],
+              '6' : ['1','0','0','0','0'],
+              '7' : ['1','1','0','0','0'],
+              '8' : ['1','1','1','0','0'],
+              '9' : ['1','1','1','1','0'],
+              '0' : ['1','1','1','1','1'],
+              '=' : ['1','0','0','0','1'],
+              '\'': ['0','1','1','1','0'],
+              '"' : ['0','1','0','0','1','0'],
+              ':' : ['1','1','1','0','0','0'],
+              '!' : ['0','0','1','1','0'],
+              '?' : ['0','0','1','1','0','0'],
+              ',' : ['1','1','0','0','1','1'],
+              '.' : ['0','1','0','1','0','1'],
+              '(' : ['1', '0','1', '1', '0'],
+              ')' : ['1', '0','1', '1', '0', '1'],
+              '$' : ['0', '0','0', '1', '0', '0', '1'],
+              '[' : ['1', '0','0', '1', '0', '0', '1'],
+              ']' : ['0', '0','0', '1', '0', '0', '1'],
+              '+' : ['0', '0','0', '1', '0', '0', '1'],
+              '-' : ['0', '0','0', '1', '0', '0', '1'],
+              '_' : ['0', '0','0', '1', '0', '0', '1'],
+          }
+          var ignore_list = [
+              192,
+              20,
+              17,
+              91,
+              18,
+              13,
+              220,
+              187
+          ];
+          var numbers = [
+              48,
+              49,
+              50,
+              51,
+              52,
+              53,
+              54,
+              55,
+              56,
+              57
+          ];
+        $(document).ready(function(){
+            var entered_text = '';
+            var output_text = [];
+            var output_morse_code = '';
+            $('.plain_text_input').keyup(function(e){
+                var pressed_key = e.which;
+                console.log(pressed_key);
+                entered_text = $('.plain_text_input').val();
+                output_text = entered_text.split('');
+                if(pressed_key == 32){
+                    $('.morse_code_output').append('<div class="letter_append"><div class="space"></div></div>');
+                } else if(pressed_key == 8){
+                    var content = $('.morse_code_output').html();
+                    if(content != '') {
+                        $('.morse_code_output div.letter_append').last().remove();
+                    }
+                } else {
+                    //if key pressed is not in the ignore list
+                    if(ignore_list.indexOf(pressed_key) == -1) {
+                        var letter_append = '<div class="letter_append">';
+
+                            var letter = String.fromCharCode(pressed_key);
+                            for (var char in morse_code_map[letter]) {
+                                letter_append = add_proper_div(morse_code_map[letter][char], letter_append);
+                            }
+                        }
+                        letter_append += '</div>';
+                        $('.morse_code_output').append(letter_append);
+                    }
+            });
+        });
+
+        function add_proper_div(char, letter_append){
+            if (char == 0) {
+                letter_append += '<div class="circle"></div>';
+            } else {
+                letter_append += '<div class="square"></div>';
+            }
+            return letter_append;
+        }
+
+    </script>
+
+    <style type="text/css">
+        .circle{
+            width: 10px;
+            height: 10px;
+            border-radius: 10px;
+            background: #000;
+            float: left;
+            margin-left: 10px;
+            margin-top: 10px;
+        }
+        .square{
+            height: 10px;
+            width: 50px;
+            background: #000;
+            margin-top: 10px;
+            float: left;
+            margin-left: 10px;
+        }
+        .space{
+            width: 20px;
+            height: 10px;
+            float: left;
+            margin-top: 10px;
+        }
+        .morse_code_output, .plain_text_input{
+            width: 90%;
+            margin-left: 5%;
+            margin-top: 20px;
+            height: auto;
+            min-height: 200px;
+            border: 1px solid #3a87ad;
+            padding: 10px;
+            overflow: auto;
+        }
+        .plain_text_input{
+            margin-top: 10px;
+        }
+        .letter_append{
+            float: left;
+        }
+    </style>
+</head>
+<body>
+<textarea class="plain_text_input" placeholder="Enter your text here!"></textarea>
+<div class="morse_code_output">
+
+</div>
+</body>
+</html>
